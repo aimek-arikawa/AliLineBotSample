@@ -17,13 +17,13 @@ var app = express();
 
 // ----------ここから----------
 
-var http = require('http');
+var https = require('https');
 
 var KOBEToday = require('./KobeToday.js');
 
 
 // イベント取得
-var eventJson = KOBEToday.getEvent(http);
+var eventJson = KOBEToday.getEvent(https);
 
 var bodyParser = require('body-parser');
 
