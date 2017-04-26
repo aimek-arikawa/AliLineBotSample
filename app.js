@@ -16,6 +16,12 @@ var cfenv = require('cfenv');
 var app = express();
 
 // ----------ここから----------
+var KOBEToday = require('./KobeToday.js');
+
+
+// イベント取得
+var eventJson = KOBEToday.getEvent();
+
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({
@@ -33,7 +39,7 @@ app.post('/api', function(req, res) {
       replyToken: req.body.events[0].replyToken,
       messages: [{
         type: "text",
-        text: req.body.events[0].message.text
+        text: eventJson
       }]
     },
     auth: {
