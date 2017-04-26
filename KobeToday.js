@@ -21,9 +21,11 @@ exports.getEvent = function (https){
 	querystr = querystr + ' ORDER BY ?datet';
 	querystr = querystr + ' LIMIT 5';
 
-	var url = 'https://data.city.kobe.lg.jp/sparql?query=' + encodeURIComponent(querystr);
+	var url = require('url');
+
+	var urlStr = 'https://data.city.kobe.lg.jp/sparql?query=' + encodeURIComponent(querystr);
 	
-	var eventJSON = https.get(url, (res) => {
+	var eventJSON = https.get(url.parse(urlStr), (res) => {
  		var body = '';
 		res.setEncoding('utf8');
 
