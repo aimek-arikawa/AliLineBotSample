@@ -1,5 +1,5 @@
 
-exports.getEvent = function (http){
+exports.getEvent = function (https){
 
 	var startDate = new Date();
 	var toDate = new Date(new Date().setMonth(startDate.getMonth() + 1));
@@ -23,9 +23,7 @@ exports.getEvent = function (http){
 
 	var url = 'https://data.city.kobe.lg.jp/sparql?query=' + encodeURIComponent(querystr);
 	
-	var ret;
-	
-	http.get(url, (res) => {
+	var eventJSON = https.get(url, (res) => {
  		var body = '';
 		res.setEncoding('utf8');
 
@@ -34,11 +32,12 @@ exports.getEvent = function (http){
 			});
 
 		res.on('end', (res) => {
-			ret = JSON.parse(body);
+			var ret = JSON.parse(body);
+			eventJSON = ret.data;
 		});
 	}).on('error', (e) => {
   		console.log(e.message); //エラー時
 	});
 	
-	return ret;
+	return eventJSON;
 };
