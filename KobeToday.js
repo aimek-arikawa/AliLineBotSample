@@ -1,5 +1,5 @@
 
-function getEvent(http){
+exports.getEvent = function (http){
 
 	var startDate = new Date();
 	var toDate = new Date(new Date().setMonth(startDate.getMonth() + 1));
