@@ -1,8 +1,5 @@
 
-function getEvent(){
-
-	let http = require('http');
-
+function getEvent(http){
 
 	var startDate = new Date();
 	var toDate = new Date(new Date().setMonth(startDate.getMonth() + 1));

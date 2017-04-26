@@ -1,4 +1,5 @@
 /*eslint-env node*/
+'use strict'
 
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
@@ -16,11 +17,14 @@ var cfenv = require('cfenv');
 var app = express();
 
 // ----------ここから----------
+
+let http = require('http');
+
 var KOBEToday = require('./KobeToday.js');
 
 
 // イベント取得
-var eventJson = KOBEToday.getEvent();
+var eventJson = KOBEToday.getEvent(http);
 
 var bodyParser = require('body-parser');
 
