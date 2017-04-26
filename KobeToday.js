@@ -26,7 +26,7 @@ function getEvent(http){
 	var ret;
 	
 	http.get(url, (res) => {
- 		let body = '';
+ 		var body = '';
 		res.setEncoding('utf8');
 
 		res.on('data', (chunk) => {

@@ -1,5 +1,4 @@
 /*eslint-env node*/
-'use strict'
 
 //------------------------------------------------------------------------------
 // node.js starter application for Bluemix
@@ -18,7 +17,7 @@ var app = express();
 
 // ----------ここから----------
 
-let http = require('http');
+var http = require('http');
 
 var KOBEToday = require('./KobeToday.js');
 
