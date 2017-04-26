@@ -34,8 +34,9 @@ exports.getEvent = function (https){
 			});
 
 		res.on('end', (res) => {
-			var ret = JSON.parse(body);
-			eventJSON = ret.data;
+//			var ret = JSON.parse(body);
+//			eventJSON = ret.data;
+			eventJSON = body;
 		});
 	}).on('error', (e) => {
   		console.log(e.message); //エラー時
