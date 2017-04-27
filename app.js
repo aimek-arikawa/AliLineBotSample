@@ -16,14 +16,7 @@ var cfenv = require('cfenv');
 var app = express();
 
 // ----------ここから----------
-
-var https = require('https');
-
 var KOBEToday = require('./KobeToday.js');
-
-
-// イベント取得
-var eventJson = KOBEToday.getEvent(https);
 
 var bodyParser = require('body-parser');
 
@@ -35,6 +28,15 @@ app.use(bodyParser.json());
 var request = require('request');
 
 app.post('/api', function(req, res) {
+  // イベント取得
+//  var eventJson = KOBEToday.getEvent(https);
+
+  var replyText = "現在神戸市内で開催中のイベント情報を知りたい場合は「イベント」と話しかけてください。";
+
+  if("イベント" === req.body.events[0].message.text){
+  	replyText = KOBEToday.getEvent();
+  }
+
   var options = {
     method: 'POST',
     uri: 'https://api.line.me/v2/bot/message/reply',
@@ -42,7 +44,7 @@ app.post('/api', function(req, res) {
       replyToken: req.body.events[0].replyToken,
       messages: [{
         type: "text",
-        text: eventJson
+        text: replyText
       }]
     },
     auth: {

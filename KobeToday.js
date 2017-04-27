@@ -1,11 +1,10 @@
 
-exports.getEvent = function (https){
+exports.getEvent = function (){
 
-	var startDate = new Date();
-	var toDate = new Date(new Date().setMonth(startDate.getMonth() + 1));
+	var moment = require("moment-timezone");
 
-	var datestStr = startDate.toISOString().replace(/[.][0-9][0-9][0-9][Z]/g,"");
-	var dateToStr = toDate.toISOString().replace(/[.][0-9][0-9][0-9][Z]/g,"");
+	var fromDate = moment().tz("Asia/Tokyo").format("YYYY-MM-DDTHH:MM:ss");
+	var toDate = moment().tz("Asia/Tokyo").add(1,'days').format("YYYY-MM-DDTHH:MM:ss");
 
 	var querystr = 'PREFIX ic: <http://imi.go.jp/ns/core/rdf#>';
 	querystr = querystr + ' PREFIX schema: <http://schema.org/>' ;
@@ -16,31 +15,46 @@ exports.getEvent = function (https){
 	querystr = querystr + ' ?s schema:url ?url .';
 	querystr = querystr + ' ?s schema:inLanguage ?lang .';
 	querystr = querystr + ' ?s schema:image ?image .';
-	querystr = querystr + ' FILTER (xsd:dateTime("' + datestStr + '") <= xsd:dateTime(?datet) && xsd:dateTime(?datet) < xsd:dateTime("' + dateToStr + '")&& ?lang="日本語" )';
+	querystr = querystr + ' FILTER (xsd:dateTime("' + fromDate + '") >= xsd:dateTime(?datef) && xsd:dateTime(?datet) > xsd:dateTime("' + fromDate + '")&& ?lang="日本語" )';
 	querystr = querystr + ' }';
 	querystr = querystr + ' ORDER BY ?datet';
-	querystr = querystr + ' LIMIT 5';
-
-	var url = require('url');
+	querystr = querystr + ' LIMIT 100';
 
 	var urlStr = 'https://data.city.kobe.lg.jp/sparql?query=' + encodeURIComponent(querystr);
 	
-	var eventJSON = https.get(url.parse(urlStr), (res) => {
- 		var body = '';
-		res.setEncoding('utf8');
-
-		res.on('data', (chunk) => {
-			body += chunk;
-			});
-
-		res.on('end', (res) => {
-//			var ret = JSON.parse(body);
-//			eventJSON = ret.data;
-			eventJSON = body;
-		});
-	}).on('error', (e) => {
-  		console.log(e.message); //エラー時
-	});
+	var options = {
+		'headers':{
+			'accept': 'application/sparql-results+json'
+		}
+	};
 	
-	return eventJSON;
+	var request = require('sync-request');
+	var response = request('GET', urlStr,options);
+	
+	
+	var eventJSON = JSON.parse(response.getBody('utf8'));
+	
+	var bindings = eventJSON["results"]["bindings"];
+  	var len = bindings.length;
+	var returnMsg = '現在開催中のイベントはありません。';
+	
+	if(0 === len) return returnMsg;
+	var targetIdx = Math.floor( Math.random() * len ) ;
+
+	returnMsg = bindings[targetIdx].name.value + "\n\n"
+				+ "[開催期間]\n" + getRangeString(bindings[targetIdx].datef.value,bindings[targetIdx].datet.value,bindings[targetIdx].timef.value,bindings[targetIdx].timet.value)+ "\n\n"
+				+ "[URL]\n" + bindings[targetIdx].url.value;
+
+	return returnMsg;
 };
+
+function getRangeString(datef,datet,timef,timet){
+  var ret = datef;
+  if(datef !== datet){
+    ret = ret + '～' + datet;
+  }
+
+  ret = ret + '\n' + timef.substring(0,5) + '～' + timet.substring(0,5);
+
+  return ret;
+}

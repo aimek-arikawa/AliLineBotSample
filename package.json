@@ -9,10 +9,14 @@
 		"body-parser": "^1.15.2",
 		"express": "4.13.x",
 		"request": "^2.75.0",
-		"cfenv": "1.0.x"
+		"cfenv": "1.0.x",
+		"sync-request": "latest",
+		"date-utils": "latest",
+		"moment": "latest",
+		"moment-timezone": "latest"
 	},
 	"repository": {},
 	"engines": {
 		"node": "4.x"
-	} 
+	}
 }
