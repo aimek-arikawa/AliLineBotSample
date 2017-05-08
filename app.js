@@ -17,6 +17,7 @@ var app = express();
 
 // ----------ここから----------
 var KOBEToday = require('./KobeToday.js');
+var faceAPI = require('./FaceAPI.js');
 
 var bodyParser = require('body-parser');
 
@@ -32,9 +33,12 @@ app.post('/api', function(req, res) {
 //  var eventJson = KOBEToday.getEvent(https);
 
   var replyText = "現在神戸市内で開催中のイベント情報を知りたい場合は「イベント」と話しかけてください。";
-
+  var contentURL;
   if("イベント" === req.body.events[0].message.text){
   	replyText = KOBEToday.getEvent();
+  }else if("image" === req.body.events[0].message.type){
+  	contentURL = "https://api.line.me/v2/bot/message/" + req.body.events[0].message.id + "/content";
+  	
   }
 
   var options = {
@@ -45,6 +49,11 @@ app.post('/api', function(req, res) {
       messages: [{
         type: "text",
         text: replyText
+      },
+      {
+      	type: "image",
+      	originalContentUrl : contentURL,
+      	previewImageUrl : contentURL
       }]
     },
     auth: {

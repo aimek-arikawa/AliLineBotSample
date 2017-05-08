@@ -41,7 +41,7 @@ exports.getEvent = function (){
 	if(0 === len) return returnMsg;
 	var targetIdx = Math.floor( Math.random() * len ) ;
 
-	returnMsg = bindings[targetIdx].name.value + "\n\n"
+	returnMsg = "【" + bindings[targetIdx].name.value + "】\n\n"
 				+ "[開催期間]\n" + getRangeString(bindings[targetIdx].datef.value,bindings[targetIdx].datet.value,bindings[targetIdx].timef.value,bindings[targetIdx].timet.value)+ "\n\n"
 				+ "[URL]\n" + bindings[targetIdx].url.value;
 
