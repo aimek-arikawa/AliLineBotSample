@@ -13,7 +13,8 @@
 		"sync-request": "latest",
 		"date-utils": "latest",
 		"moment": "latest",
-		"moment-timezone": "latest"
+		"moment-timezone": "latest",
+		"watson-developer-cloud": "latest"
 	},
 	"repository": {},
 	"engines": {

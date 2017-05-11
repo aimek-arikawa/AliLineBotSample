@@ -33,12 +33,13 @@ app.post('/api', function(req, res) {
 //  var eventJson = KOBEToday.getEvent(https);
 
   var replyText = "現在神戸市内で開催中のイベント情報を知りたい場合は「イベント」と話しかけてください。";
-  var contentURL;
+//  var contentURL = "";
   if("イベント" === req.body.events[0].message.text){
   	replyText = KOBEToday.getEvent();
-  }else if("image" === req.body.events[0].message.type){
-  	contentURL = "https://api.line.me/v2/bot/message/" + req.body.events[0].message.id + "/content";
-  	
+  }
+  else if("image" === req.body.events[0].message.type){
+  	var contentURL = "https://api.line.me/v2/bot/message/" + req.body.events[0].message.id + "/content?messageId="+ req.body.events[0].message.id;
+  	replyText = faceAPI.recognition(contentURL);
   }
 
   var options = {
@@ -49,11 +50,6 @@ app.post('/api', function(req, res) {
       messages: [{
         type: "text",
         text: replyText
-      },
-      {
-      	type: "image",
-      	originalContentUrl : contentURL,
-      	previewImageUrl : contentURL
       }]
     },
     auth: {
